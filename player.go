@@ -38,29 +38,16 @@ func (p *player) draw(renderer *sdl.Renderer) {
 func (p *player) update() {
 	keys := sdl.GetKeyboardState()
 
-	if keys[sdl.SCANCODE_LEFT] == 1 {
+	if keys[sdl.SCANCODE_LEFT] == 1 && p.x-playerSize/2 > 0 {
 		p.x -= playerSpeed
 	}
-	if keys[sdl.SCANCODE_RIGHT] == 1 {
+	if keys[sdl.SCANCODE_RIGHT] == 1 && p.x+playerSize/2 < screenWidth {
 		p.x += playerSpeed
 	}
-	if keys[sdl.SCANCODE_UP] == 1 {
+	if keys[sdl.SCANCODE_UP] == 1 && p.y-playerSize/2 > screenHeight/2 {
 		p.y -= playerSpeed
 	}
-	if keys[sdl.SCANCODE_DOWN] == 1 {
+	if keys[sdl.SCANCODE_DOWN] == 1 && p.y+playerSize/2 < screenHeight {
 		p.y += playerSpeed
-	}
-
-	if p.x+playerSize/2 > screenWidth {
-		p.x = screenWidth - playerSize/2
-	}
-	if p.x-playerSize/2 < 0 {
-		p.x = 0 + playerSize/2
-	}
-	if p.y+playerSize/2 > screenHeight {
-		p.y = screenHeight - playerSize/2
-	}
-	if p.y-playerSize/2 < screenHeight/2 {
-		p.y = screenHeight/2 + playerSize/2
 	}
 }
