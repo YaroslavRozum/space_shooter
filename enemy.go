@@ -23,8 +23,8 @@ func newBasicEnemy(renderer *sdl.Renderer, x, y float64) (e enemy) {
 func createEnemies(x, y int, renderer *sdl.Renderer) (enms enemies, err error) {
 	for i := 0; i < x; i++ {
 		for j := 0; j < y; j++ {
-			x := (float64(i)/5)*screenWidth + enemySize/2
-			y := float64(j)*enemySize + enemySize/2
+			x := (float64(i)/5)*screenWidth + enemySize/2 + 15
+			y := float64(j)*enemySize + enemySize/2 + float64(j*10)
 			enm := newBasicEnemy(renderer, x, y)
 			enms = append(enms, &enm)
 		}

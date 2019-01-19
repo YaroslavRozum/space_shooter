@@ -1,17 +1,22 @@
 package main
 
 import (
+	"math"
+	"time"
+
 	"github.com/veandco/go-sdl2/sdl"
 )
 
 const (
-	playerSpeed = 0.3
-	playerSize  = 80
+	playerSpeed          = 0.5
+	playerSize           = 80
+	playerBulletCooldown = time.Millisecond * 250
 )
 
 type player struct {
-	texture *sdl.Texture
-	x, y    float64
+	texture   *sdl.Texture
+	x, y      float64
+	lastShoot time.Time
 }
 
 func newPlayer(renderer *sdl.Renderer) (p player) {
@@ -35,6 +40,16 @@ func (p *player) draw(renderer *sdl.Renderer) {
 	)
 }
 
+func (p *player) shoot(x, y float64) {
+	if bul, ok := bulletFromPool(); ok {
+		bul.active = true
+		bul.x = x
+		bul.y = y
+		bul.angle = 270 * (math.Pi / 180)
+		p.lastShoot = time.Now()
+	}
+}
+
 func (p *player) update() {
 	keys := sdl.GetKeyboardState()
 
@@ -49,5 +64,11 @@ func (p *player) update() {
 	}
 	if keys[sdl.SCANCODE_DOWN] == 1 && p.y+playerSize/2 < screenHeight {
 		p.y += playerSpeed
+	}
+	if keys[sdl.SCANCODE_SPACE] == 1 {
+		if time.Since(p.lastShoot) >= playerBulletCooldown {
+			p.shoot(p.x-10, p.y-playerSize/2)
+			p.shoot(p.x+10, p.y-playerSize/2)
+		}
 	}
 }

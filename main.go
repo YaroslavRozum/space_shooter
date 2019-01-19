@@ -56,6 +56,8 @@ func main() {
 	if err != nil {
 		fmt.Printf("Creating enemies failed %v", err)
 	}
+	initBulletPool(renderer)
+	bg := createBackground(renderer, 0, 0)
 	for {
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
 			switch event.(type) {
@@ -63,12 +65,14 @@ func main() {
 				return
 			}
 		}
-		renderer.SetDrawColor(255, 255, 255, 255)
 		renderer.Clear()
-
+		bg.draw(renderer)
 		plr.draw(renderer)
 		plr.update()
 		enms.draw(renderer)
+
+		drawAndUpdateBullets(renderer)
+
 		renderer.Present()
 	}
 }
