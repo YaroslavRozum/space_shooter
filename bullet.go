@@ -23,7 +23,7 @@ const (
 func newBullet(renderer *sdl.Renderer) (b bullet) {
 	b.texture = textureFromBMP(renderer, "./sprites/bullet.bmp")
 
-	return b
+	return
 }
 
 func (b *bullet) draw(renderer *sdl.Renderer) {
@@ -54,7 +54,9 @@ func (b *bullet) update() {
 	}
 }
 
-var bulletPool []*bullet
+type bullets []*bullet
+
+var bulletPool bullets
 
 func initBulletPool(renderer *sdl.Renderer) {
 	for i := 0; i < 30; i++ {
@@ -63,8 +65,8 @@ func initBulletPool(renderer *sdl.Renderer) {
 	}
 }
 
-func bulletFromPool() (*bullet, bool) {
-	for _, bul := range bulletPool {
+func (b bullets) getBullet() (*bullet, bool) {
+	for _, bul := range b {
 		if !bul.active {
 			return bul, true
 		}
@@ -72,7 +74,7 @@ func bulletFromPool() (*bullet, bool) {
 	return nil, false
 }
 
-func drawAndUpdateBullets(renderer *sdl.Renderer) {
+func (b *bullets) drawAndUpdateBullets(renderer *sdl.Renderer) {
 	for _, bul := range bulletPool {
 		bul.draw(renderer)
 		bul.update()

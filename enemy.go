@@ -1,10 +1,15 @@
 package main
 
 import (
+	"time"
+
 	"github.com/veandco/go-sdl2/sdl"
 )
 
-const enemySize = 80
+const (
+	enemySize           = 80
+	enemyAnimationDelay = time.Millisecond * 250
+)
 
 type enemy struct {
 	texture *sdl.Texture
@@ -17,7 +22,7 @@ func newBasicEnemy(renderer *sdl.Renderer, x, y float64) (e enemy) {
 	e.x = x
 	e.y = y
 
-	return e
+	return
 }
 
 func createEnemies(x, y int, renderer *sdl.Renderer) (enms enemies, err error) {
@@ -42,14 +47,33 @@ func (e *enemy) draw(renderer *sdl.Renderer) {
 	)
 }
 
-func (e *enemy) update() {
+func (e *enemy) bulletInCoordinates() (*bullet, bool) {
+	for _, b := range bulletPool {
+		if b.active &&
+			b.x >= e.x-enemySize/2 &&
+			b.x <= e.x+enemySize/2 &&
+			b.y <= e.y+enemySize/2 &&
+			b.y >= e.y-enemySize/2 {
+			return b, true
+		}
+	}
 
+	return nil, false
+}
+
+func (e *enemy) update() {
+	if b, ok := e.bulletInCoordinates(); ok {
+		b.active = false
+		// fmt.Println("got")
+		// e.destroy()
+	}
 }
 
 type enemies []*enemy
 
-func (e enemies) draw(renderer *sdl.Renderer) {
+func (e enemies) drawAndUpdate(renderer *sdl.Renderer) {
 	for _, enemy := range e {
 		enemy.draw(renderer)
+		enemy.update()
 	}
 }

@@ -69,9 +69,9 @@ func main() {
 		bg.draw(renderer)
 		plr.draw(renderer)
 		plr.update()
-		enms.draw(renderer)
+		enms.drawAndUpdate(renderer)
 
-		drawAndUpdateBullets(renderer)
+		bulletPool.drawAndUpdateBullets(renderer)
 
 		renderer.Present()
 	}

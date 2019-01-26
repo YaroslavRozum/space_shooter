@@ -25,7 +25,7 @@ func newPlayer(renderer *sdl.Renderer) (p player) {
 	p.x = screenWidth / 2
 	p.y = screenHeight - playerSize
 
-	return p
+	return
 }
 
 func (p *player) draw(renderer *sdl.Renderer) {
@@ -41,7 +41,7 @@ func (p *player) draw(renderer *sdl.Renderer) {
 }
 
 func (p *player) shoot(x, y float64) {
-	if bul, ok := bulletFromPool(); ok {
+	if bul, ok := bulletPool.getBullet(); ok {
 		bul.active = true
 		bul.x = x
 		bul.y = y
@@ -53,16 +53,16 @@ func (p *player) shoot(x, y float64) {
 func (p *player) update() {
 	keys := sdl.GetKeyboardState()
 
-	if keys[sdl.SCANCODE_LEFT] == 1 && p.x-playerSize/2 > 0 {
+	if keys[sdl.SCANCODE_A] == 1 && p.x-playerSize/2 > 0 {
 		p.x -= playerSpeed
 	}
-	if keys[sdl.SCANCODE_RIGHT] == 1 && p.x+playerSize/2 < screenWidth {
+	if keys[sdl.SCANCODE_D] == 1 && p.x+playerSize/2 < screenWidth {
 		p.x += playerSpeed
 	}
-	if keys[sdl.SCANCODE_UP] == 1 && p.y-playerSize/2 > screenHeight/2 {
+	if keys[sdl.SCANCODE_W] == 1 && p.y-playerSize/2 > screenHeight/2 {
 		p.y -= playerSpeed
 	}
-	if keys[sdl.SCANCODE_DOWN] == 1 && p.y+playerSize/2 < screenHeight {
+	if keys[sdl.SCANCODE_S] == 1 && p.y+playerSize/2 < screenHeight {
 		p.y += playerSpeed
 	}
 	if keys[sdl.SCANCODE_SPACE] == 1 {
