@@ -20,8 +20,8 @@ const (
 	bulletSpeed  = 1
 )
 
-func newBullet(renderer *sdl.Renderer) (b bullet) {
-	b.texture = textureFromBMP(renderer, "./sprites/bullet.bmp")
+func newBullet(texture *sdl.Texture) (b bullet) {
+	b.texture = texture
 
 	return
 }
@@ -59,8 +59,9 @@ type bullets []*bullet
 var bulletPool bullets
 
 func initBulletPool(renderer *sdl.Renderer) {
+	texture := textureFromBMP(renderer, "./sprites/bullet.bmp")
 	for i := 0; i < 30; i++ {
-		bull := newBullet(renderer)
+		bull := newBullet(texture)
 		bulletPool = append(bulletPool, &bull)
 	}
 }
