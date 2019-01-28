@@ -74,7 +74,7 @@ func (b bullets) getBullet() (*bullet, bool) {
 	return nil, false
 }
 
-func (b *bullets) drawAndUpdateBullets(renderer *sdl.Renderer) {
+func (b bullets) drawAndUpdateBullets(renderer *sdl.Renderer) {
 	for _, bul := range bulletPool {
 		bul.draw(renderer)
 		bul.update()
