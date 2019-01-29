@@ -8,7 +8,7 @@ import (
 
 const (
 	enemySize           = 80
-	enemyAnimationDelay = time.Millisecond * 100
+	enemyAnimationDelay = time.Millisecond * 90
 )
 
 type enemy struct {
