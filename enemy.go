@@ -2,7 +2,6 @@ package main
 
 import (
 	"time"
-
 	"github.com/veandco/go-sdl2/sdl"
 )
 
@@ -14,6 +13,7 @@ const (
 type enemy struct {
 	texture *sdl.Texture
 	x, y    float64
+	active 	bool
 }
 
 func newBasicEnemy(texture *sdl.Texture, x, y float64) (e enemy) {
@@ -21,6 +21,7 @@ func newBasicEnemy(texture *sdl.Texture, x, y float64) (e enemy) {
 
 	e.x = x
 	e.y = y
+	e.active = true
 
 	return
 }
@@ -65,6 +66,7 @@ func (e *enemy) bulletInCoordinates() (*bullet, bool) {
 func (e *enemy) update() {
 	if b, ok := e.bulletInCoordinates(); ok {
 		b.active = false
+		e.active = false
 		// fmt.Println("got")
 		// e.destroy()
 	}
@@ -73,8 +75,13 @@ func (e *enemy) update() {
 type enemies []*enemy
 
 func (e enemies) drawAndUpdate(renderer *sdl.Renderer) {
-	for _, enemy := range e {
-		enemy.draw(renderer)
-		enemy.update()
+	newEnem := []*enemy{}
+	for _ , enem := range e {
+		if enem.active {
+			enem.draw(renderer)
+			enem.update()
+			newEnem = append(newEnem, enem)
+		}
 	}
+	e = newEnem
 }
