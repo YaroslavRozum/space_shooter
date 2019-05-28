@@ -54,6 +54,17 @@ func (b *bullet) update() {
 	}
 }
 
+func (b *bullet) enemyInCoordinates(e *enemy) bool {
+	if b.active &&
+		b.x >= e.x-enemySize/2 &&
+		b.x <= e.x+enemySize/2 &&
+		b.y <= e.y+enemySize/2 &&
+		b.y >= e.y-enemySize/2 {
+		return true
+	}
+	return false
+}
+
 type bullets []*bullet
 
 var bulletPool bullets

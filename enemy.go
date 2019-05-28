@@ -49,14 +49,28 @@ func (e *enemy) draw(renderer *sdl.Renderer) {
 	)
 }
 
-func (e *enemy) bulletInCoordinates() (*bullet, bool) {
-	for _, b := range bulletPool {
-		if b.active &&
-			b.x >= e.x-enemySize/2 &&
-			b.x <= e.x+enemySize/2 &&
-			b.y <= e.y+enemySize/2 &&
-			b.y >= e.y-enemySize/2 {
-			return b, true
+func (e *enemy) bulletInCoordinates() ([]*bullet, bool) {
+	bulletsToReturn := []*bullet{}
+	for i, b := range bulletPool {
+		if b.enemyInCoordinates(e){
+			if i != 0 && i  != len(bulletPool) - 1 {
+				if bulletPool[i - 1].enemyInCoordinates(e){
+					bulletsToReturn = append(bulletsToReturn, bulletPool[i - 1])
+				}
+				if bulletPool[i + 1].enemyInCoordinates(e){
+					bulletsToReturn = append(bulletsToReturn, bulletPool[i + 1])
+				}
+			} else if  i == len(bulletPool) - 1 {
+				if bulletPool[i - 1].enemyInCoordinates(e){
+					bulletsToReturn = append(bulletsToReturn, bulletPool[i - 1])
+				}
+			} else if i == 0 {
+				if bulletPool[i + 1].enemyInCoordinates(e){
+					bulletsToReturn = append(bulletsToReturn, bulletPool[i + 1])
+				}
+			}
+
+			return append(bulletsToReturn, b), true
 		}
 	}
 
@@ -65,10 +79,10 @@ func (e *enemy) bulletInCoordinates() (*bullet, bool) {
 
 func (e *enemy) update() {
 	if b, ok := e.bulletInCoordinates(); ok {
-		b.active = false
+		for _, bull := range b {
+			bull.active = false
+		}
 		e.active = false
-		// fmt.Println("got")
-		// e.destroy()
 	}
 }
 
