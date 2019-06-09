@@ -69,7 +69,7 @@ func main() {
 		bg.draw(renderer)
 		plr.draw(renderer)
 		plr.update()
-		enms.drawAndUpdate(renderer)
+		enms = enms.drawAndUpdate(renderer)
 
 		bulletPool.drawAndUpdateBullets(renderer)
 

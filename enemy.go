@@ -2,6 +2,7 @@ package main
 
 import (
 	"time"
+
 	"github.com/veandco/go-sdl2/sdl"
 )
 
@@ -13,7 +14,7 @@ const (
 type enemy struct {
 	texture *sdl.Texture
 	x, y    float64
-	active 	bool
+	active  bool
 }
 
 func newBasicEnemy(texture *sdl.Texture, x, y float64) (e enemy) {
@@ -52,21 +53,21 @@ func (e *enemy) draw(renderer *sdl.Renderer) {
 func (e *enemy) bulletsInCoordinates() ([]*bullet, bool) {
 	bulletsToReturn := []*bullet{}
 	for i, b := range bulletPool {
-		if b.enemyInCoordinates(e){
-			if i != 0 && i  != len(bulletPool) - 1 {
-				if bulletPool[i - 1].enemyInCoordinates(e){
-					bulletsToReturn = append(bulletsToReturn, bulletPool[i - 1])
+		if b.enemyInCoordinates(e) {
+			if i != 0 && i != len(bulletPool)-1 {
+				if bulletPool[i-1].enemyInCoordinates(e) {
+					bulletsToReturn = append(bulletsToReturn, bulletPool[i-1])
 				}
-				if bulletPool[i + 1].enemyInCoordinates(e){
-					bulletsToReturn = append(bulletsToReturn, bulletPool[i + 1])
+				if bulletPool[i+1].enemyInCoordinates(e) {
+					bulletsToReturn = append(bulletsToReturn, bulletPool[i+1])
 				}
-			} else if  i == len(bulletPool) - 1 {
-				if bulletPool[i - 1].enemyInCoordinates(e){
-					bulletsToReturn = append(bulletsToReturn, bulletPool[i - 1])
+			} else if i == len(bulletPool)-1 {
+				if bulletPool[i-1].enemyInCoordinates(e) {
+					bulletsToReturn = append(bulletsToReturn, bulletPool[i-1])
 				}
 			} else if i == 0 {
-				if bulletPool[i + 1].enemyInCoordinates(e){
-					bulletsToReturn = append(bulletsToReturn, bulletPool[i + 1])
+				if bulletPool[i+1].enemyInCoordinates(e) {
+					bulletsToReturn = append(bulletsToReturn, bulletPool[i+1])
 				}
 			}
 
@@ -88,14 +89,19 @@ func (e *enemy) update() {
 
 type enemies []*enemy
 
-func (e enemies) drawAndUpdate(renderer *sdl.Renderer) {
+func (e enemies) drawAndUpdate(renderer *sdl.Renderer) enemies {
 	newEnem := []*enemy{}
-	for _ , enem := range e {
+	for _, enem := range e {
 		if enem.active {
 			enem.draw(renderer)
 			enem.update()
 			newEnem = append(newEnem, enem)
 		}
 	}
-	e = newEnem
+	keys := sdl.GetKeyboardState()
+
+	if keys[sdl.SCANCODE_R] == 1 {
+		newEnem, _ = createEnemies(5, 3, renderer)
+	}
+	return newEnem
 }
