@@ -27,7 +27,7 @@ func newBasicEnemy(texture *sdl.Texture, x, y float64) (e enemy) {
 	return
 }
 
-func createEnemies(x, y int, renderer *sdl.Renderer) (enms enemies, err error) {
+func createEnemies(x, y int, renderer *sdl.Renderer) (enms enemies) {
 	texture := textureFromBMP(renderer, "./sprites/alienblaster.bmp")
 	for i := 0; i < x; i++ {
 		for j := 0; j < y; j++ {
@@ -37,7 +37,7 @@ func createEnemies(x, y int, renderer *sdl.Renderer) (enms enemies, err error) {
 			enms = append(enms, &enm)
 		}
 	}
-	return enms, nil
+	return enms
 }
 
 func (e *enemy) draw(renderer *sdl.Renderer) {
@@ -89,6 +89,14 @@ func (e *enemy) update() {
 
 type enemies []*enemy
 
+func (e *enemies) refresh(renderer *sdl.Renderer) {
+	keys := sdl.GetKeyboardState()
+
+	if keys[sdl.SCANCODE_R] == 1 {
+		*e = createEnemies(5, 3, renderer)
+	}
+}
+
 func (e *enemies) drawAndUpdate(renderer *sdl.Renderer) {
 	newEnem := []*enemy{}
 	for _, enem := range *e {
@@ -98,10 +106,6 @@ func (e *enemies) drawAndUpdate(renderer *sdl.Renderer) {
 			newEnem = append(newEnem, enem)
 		}
 	}
-	keys := sdl.GetKeyboardState()
-
-	if keys[sdl.SCANCODE_R] == 1 {
-		newEnem, _ = createEnemies(5, 3, renderer)
-	}
 	*e = newEnem
+	e.refresh(renderer)
 }

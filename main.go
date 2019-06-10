@@ -52,10 +52,7 @@ func main() {
 	defer renderer.Destroy()
 	plr := newPlayer(renderer)
 	defer plr.texture.Destroy()
-	enms, err := createEnemies(5, 3, renderer)
-	if err != nil {
-		fmt.Printf("Creating enemies failed %v", err)
-	}
+	enms := createEnemies(5, 3, renderer)
 	initBulletPool(renderer)
 	bg := createBackground(renderer, 0, 0)
 	for {
