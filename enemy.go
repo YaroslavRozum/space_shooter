@@ -89,9 +89,9 @@ func (e *enemy) update() {
 
 type enemies []*enemy
 
-func (e enemies) drawAndUpdate(renderer *sdl.Renderer) enemies {
+func (e *enemies) drawAndUpdate(renderer *sdl.Renderer) {
 	newEnem := []*enemy{}
-	for _, enem := range e {
+	for _, enem := range *e {
 		if enem.active {
 			enem.draw(renderer)
 			enem.update()
@@ -103,5 +103,5 @@ func (e enemies) drawAndUpdate(renderer *sdl.Renderer) enemies {
 	if keys[sdl.SCANCODE_R] == 1 {
 		newEnem, _ = createEnemies(5, 3, renderer)
 	}
-	return newEnem
+	*e = newEnem
 }
