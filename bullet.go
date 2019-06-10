@@ -77,8 +77,8 @@ func initBulletPool(renderer *sdl.Renderer) {
 	}
 }
 
-func (b bullets) getBullet() (*bullet, bool) {
-	for _, bul := range b {
+func (b *bullets) getBullet() (*bullet, bool) {
+	for _, bul := range *b {
 		if !bul.active {
 			return bul, true
 		}
@@ -86,8 +86,8 @@ func (b bullets) getBullet() (*bullet, bool) {
 	return nil, false
 }
 
-func (b bullets) drawAndUpdateBullets(renderer *sdl.Renderer) {
-	for _, bul := range bulletPool {
+func (b *bullets) drawAndUpdateBullets(renderer *sdl.Renderer) {
+	for _, bul := range *b {
 		bul.draw(renderer)
 		bul.update()
 	}
