@@ -90,14 +90,16 @@ func (e *enemy) update() {
 type enemies []*enemy
 
 func (e *enemies) refresh(renderer *sdl.Renderer) {
-	keys := sdl.GetKeyboardState()
-
-	if keys[sdl.SCANCODE_R] == 1 {
-		*e = createEnemies(5, 3, renderer)
-	}
+	*e = createEnemies(5, 3, renderer)
 }
 
 func (e *enemies) drawAndUpdate(renderer *sdl.Renderer) {
+	keys := sdl.GetKeyboardState()
+
+	if keys[sdl.SCANCODE_R] == 1 {
+		e.refresh(renderer)
+	}
+
 	newEnem := []*enemy{}
 	for _, enem := range *e {
 		if enem.active {
@@ -107,5 +109,4 @@ func (e *enemies) drawAndUpdate(renderer *sdl.Renderer) {
 		}
 	}
 	*e = newEnem
-	e.refresh(renderer)
 }
