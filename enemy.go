@@ -108,5 +108,6 @@ func (e *enemies) drawAndUpdate(renderer *sdl.Renderer) {
 			newEnem = append(newEnem, enem)
 		}
 	}
+	
 	*e = newEnem
 }
